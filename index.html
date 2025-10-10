@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WasteVision - Image Identifier</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      #preview {
+        margin-top: 20px;
+        max-width: 600px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        display: none;
+      }
+
+      .results {
+        margin-top: 30px;
+        text-align: left;
+        display: inline-block;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .item {
+        padding: 5px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      #jsonResponse {
+        margin-top: 30px;
+        text-align: left;
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 10px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>WasteVision</h1>
+    <p>
+      Upload an image to identify recyclable, biodegradable, and hazardous waste
+      items.
+    </p>
+
+    <input type="file" id="fileInput" accept="image/*" />
+    <button id="uploadBtn">Identify</button>
+
+    <br />
+
+    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+      <div style="text-align: center;">
+        <h3>Custom Model (trained-v2.pt)</h3>
+        <img id="previewCustom" style="max-width: 500px; border: 2px solid #ccc; border-radius: 10px; display: none;" />
+        <div id="resultsCustom" class="results" style="display: none"></div>
+      </div>
+
+      <div style="text-align: center;">
+        <h3>Default Model (yolov5s.pt)</h3>
+        <img id="previewDefault" style="max-width: 500px; border: 2px solid #ccc; border-radius: 10px; display: none;" />
+        <div id="resultsDefault" class="results" style="display: none"></div>
+      </div>
+    </div>
+
+    <div id="jsonResponse"></div>
+
+    <script>
+      const uploadBtn = document.getElementById("uploadBtn");
+      const fileInput = document.getElementById("fileInput");
+      const previewCustom = document.getElementById("previewCustom");
+      const previewDefault = document.getElementById("previewDefault");
+      const resultsCustom = document.getElementById("resultsCustom");
+      const resultsDefault = document.getElementById("resultsDefault");
+
+      uploadBtn.addEventListener("click", async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Please select an image first!");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        resultsCustom.style.display = "none";
+        resultsDefault.style.display = "none";
+        resultsCustom.innerHTML = "Processing...";
+        resultsDefault.innerHTML = "Processing...";
+
+        try {
+          const response = await fetch("http://localhost:5000/identify", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          // Display JSON response (shorten base64 images)
+          const jsonResponse = document.getElementById("jsonResponse");
+          const dataForDisplay = JSON.parse(JSON.stringify(data));
+
+          // Shorten base64 images to show structure
+          if (dataForDisplay.custom_model && dataForDisplay.custom_model.image) {
+            dataForDisplay.custom_model.image = dataForDisplay.custom_model.image.substring(0, 50) + "... [truncated]";
+          }
+          if (dataForDisplay.default_model && dataForDisplay.default_model.image) {
+            dataForDisplay.default_model.image = dataForDisplay.default_model.image.substring(0, 50) + "... [truncated]";
+          }
+
+          jsonResponse.innerHTML = JSON.stringify(dataForDisplay, null, 2);
+          jsonResponse.style.display = "block";
+
+          if (data.error) {
+            resultsCustom.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+            resultsCustom.style.display = "block";
+            return;
+          }
+
+          // Display CUSTOM model results
+          if (data.custom_model) {
+            if (data.custom_model.image) {
+              previewCustom.src = data.custom_model.image;
+              previewCustom.style.display = "block";
+            }
+
+            resultsCustom.innerHTML = "";
+            resultsCustom.style.display = "block";
+
+            if (!data.custom_model.detections || data.custom_model.detections.length === 0) {
+              resultsCustom.innerHTML = "<p>No items detected.</p>";
+            } else {
+              data.custom_model.detections.forEach((item) => {
+                const el = document.createElement("div");
+                el.classList.add("item");
+                el.innerHTML = `<strong>${item.item}</strong> (${item.type}) — ${(item.confidence * 100).toFixed(1)}%`;
+                resultsCustom.appendChild(el);
+              });
+            }
+          }
+
+          // Display DEFAULT model results
+          if (data.default_model) {
+            if (data.default_model.image) {
+              previewDefault.src = data.default_model.image;
+              previewDefault.style.display = "block";
+            }
+
+            resultsDefault.innerHTML = "";
+            resultsDefault.style.display = "block";
+
+            if (!data.default_model.detections || data.default_model.detections.length === 0) {
+              resultsDefault.innerHTML = "<p>No items detected.</p>";
+            } else {
+              data.default_model.detections.forEach((item) => {
+                const el = document.createElement("div");
+                el.classList.add("item");
+                el.innerHTML = `<strong>${item.item}</strong> (${item.type}) — ${(item.confidence * 100).toFixed(1)}%`;
+                resultsDefault.appendChild(el);
+              });
+            }
+          }
+        } catch (error) {
+          resultsCustom.innerHTML = `<p style="color:red;">Request failed: ${error}</p>`;
+          resultsCustom.style.display = "block";
+        }
+      });
+    </script>
+  </body>
+</html>
