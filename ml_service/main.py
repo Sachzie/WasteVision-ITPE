@@ -25,11 +25,11 @@ origins = [
 ]
 
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,        # Allowed frontend URLs
-    allow_credentials=True,
-    allow_methods=["*"],          # Allow all HTTP methods
-    allow_headers=["*"],          # Allow all headers
+   CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 # Load both YOLOv5 models
@@ -267,7 +267,7 @@ async def identify(file: UploadFile = File(...)):
         buffered_default = io.BytesIO()
         image_default.save(buffered_default, format="PNG")
         img_default_str = base64.b64encode(buffered_default.getvalue()).decode()
-
+        print(custom_response)
         logger.info("Request completed successfully")
         return JSONResponse(content={
             "custom_model": {
