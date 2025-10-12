@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python -c \"import pathlib; import pickle; import torch; weights = torch.load(''yolov5s.pt'', map_location=''cpu''); torch.save(weights, ''yolov5s_fixed.pt'', pickle_protocol=pickle.HIGHEST_PROTOCOL, _use_new_zipfile_serialization=True)\")"
-    ],
-    "deny": [],
-    "ask": []
-  }
-}
