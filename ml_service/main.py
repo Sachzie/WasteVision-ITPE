@@ -267,16 +267,12 @@ async def identify(file: UploadFile = File(...)):
         buffered_default = io.BytesIO()
         image_default.save(buffered_default, format="PNG")
         img_default_str = base64.b64encode(buffered_default.getvalue()).decode()
-        print(custom_response)
+        # print(custom_response)
         logger.info("Request completed successfully")
         return JSONResponse(content={
-            "custom_model": {
-                "detections": custom_response,
-                "image": f"data:image/png;base64,{img_custom_str}"
-            },
             "default_model": {
                 "detections": default_response,
-                "image": f"data:image/png;base64,{img_default_str}"
+                # "image": f"data:image/png;base64,{img_default_str}"
             }
         })
 

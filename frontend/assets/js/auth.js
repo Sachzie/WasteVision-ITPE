@@ -1,39 +1,42 @@
-// auth.js — simple demo auth using localStorage
-const auth = (function(){
-  function initRegister(){
-    document.getElementById('registerBtn').addEventListener('click', register);
-  }
-  function initLogin(){
-    document.getElementById('loginBtn').addEventListener('click', login);
-  }
-  function register(){
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pw = document.getElementById('regPassword').value;
-    if(!email || !pw){ alert('Please fill fields'); return; }
-    const user = { name, email, createdAt: new Date().toISOString() };
-    localStorage.setItem('wv_user', JSON.stringify(user));
-    // for demo, also store password (NOT SECURE — replace with backend later)
-    localStorage.setItem('wv_pwd_'+email, pw);
-    location.href = 'dashboard.html';
-  }
-  function login(){
-    const email = document.getElementById('loginEmail').value.trim();
-    const pw = document.getElementById('loginPassword').value;
-    if(!email||!pw){ alert('Enter credentials'); return; }
-    const saved = localStorage.getItem('wv_pwd_'+email);
-    if(saved === pw){
-      const user = JSON.parse(localStorage.getItem('wv_user')||'{"email":"'+email+'"}');
-      user.email = email;
-      localStorage.setItem('wv_user', JSON.stringify(user));
-      location.href = 'dashboard.html';
-    } else {
-      alert('Invalid login (demo). Register or use saved credentials.');
+document.addEventListener("DOMContentLoaded", () => {
+  const registerBtn = document.getElementById("registerBtn");
+
+  registerBtn.addEventListener("click", async () => {
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value;
+
+    // Basic validation
+    if (!name || !email || !password) {
+      alert("Please fill out all fields.");
+      return;
     }
-  }
-  function logout(){
-    localStorage.removeItem('wv_user');
-    location.href = 'index.html';
-  }
-  return { initRegister, initLogin, logout };
-})();
+
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Registration successful!");
+        // Optionally redirect to login
+        window.location.href = "login.html";
+      } else {
+        alert(data.message || "Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  });
+});
