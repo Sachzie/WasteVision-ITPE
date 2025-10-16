@@ -1,0 +1,4 @@
+/* small components & utilities */
+.logo{width:36px;height:36px;border-radius:6px;margin-right:10px;vertical-align:middle}
+.sidebar-brand{display:flex;align-items:center;gap:8px;font-weight:600;margin-bottom:12px}
+.user-chip{background:#f1f5f9;padding:6px 10px;border-radius:999px}

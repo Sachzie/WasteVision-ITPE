@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WasteVision — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div id="component-navbar"></div>
+
+  <div class="app-shell">
+    <div id="component-sidebar"></div>
+
+    <main class="main-content">
+      <header class="page-header">
+        <h2>Dashboard</h2>
+        <div class="header-right">
+          <span id="greeting">Hello</span>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="card upload-card">
+          <h3>Upload an image for detection</h3>
+          <input id="wasteFile" type="file" accept="image/*" />
+          <div class="controls">
+            <button id="detectBtn" class="btn-primary">Detect Waste</button>
+            <button id="saveHistoryBtn" class="btn-outline" title="Save latest detection to history">Save to history</button>
+          </div>
+
+          <div id="previewWrap" class="preview-wrap" style="display:none;">
+            <h4>Preview</h4>
+            <img id="previewImage" alt="preview" class="preview-img" />
+          </div>
+        </div>
+
+        <div class="card result-card">
+          <h3>Detection result</h3>
+          <div id="resultContent" class="result-content">
+            <p class="muted">No detection yet. Upload an image and click Detect.</p>
+          </div>
+        </div>
+
+        <aside class="card tips-card">
+          <h3>Quick Recycling Tips</h3>
+          <ul id="tipsList">
+            <li>Separate hazardous waste (batteries, chemicals) from general trash.</li>
+            <li>Clean containers before recycling to avoid contamination.</li>
+            <li>Compost food scraps when possible.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="history-snippet card">
+        <h3>Recent uploads</h3>
+        <div id="recentList" class="recent-list">No recent uploads.</div>
+        <p class="small"><a href="history.html">View all history</a></p>
+      </section>
+    </main>
+  </div>
+
+  <div id="component-footer"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      await main.loadComponents();
+      dashboard.init();
+    });
+  </script>
+</body>
+</html>

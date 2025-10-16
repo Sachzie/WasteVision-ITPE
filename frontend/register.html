@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WasteVision — Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body>
+  <div id="component-navbar"></div>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1 class="brand">WasteVision</h1>
+      <p class="muted">Create an account to save your detections and view history.</p>
+
+      <label>Full name
+        <input id="regName" type="text" placeholder="Jane Doe" />
+      </label>
+
+      <label>Email
+        <input id="regEmail" type="email" placeholder="you@example.com" />
+      </label>
+
+      <label>Password
+        <input id="regPassword" type="password" placeholder="••••••••" />
+      </label>
+
+      <button id="registerBtn" class="btn-primary">Register</button>
+
+      <p class="small">Already have an account? <a href="index.html">Login</a></p>
+    </div>
+  </main>
+
+  <div id="component-footer"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      main.loadComponents().then(()=>{ auth.initRegister(); });
+    });
+  </script>
+</body>
+</html>

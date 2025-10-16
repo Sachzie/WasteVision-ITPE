@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WasteVision — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body>
+  <div id="component-navbar"></div>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1 class="brand">WasteVision</h1>
+      <p class="muted">Identify biodegradable, non-biodegradable, and hazardous waste.</p>
+
+      <label>Email
+        <input id="loginEmail" type="email" placeholder="you@example.com" />
+      </label>
+
+      <label>Password
+        <input id="loginPassword" type="password" placeholder="••••••••" />
+      </label>
+
+      <button id="loginBtn" class="btn-primary">Log in</button>
+
+      <p class="small">No account? <a href="register.html">Register here</a></p>
+    </div>
+  </main>
+
+  <div id="component-footer"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    // init components and page
+    window.addEventListener('DOMContentLoaded', () => {
+      main.loadComponents().then(()=>{ auth.initLogin(); });
+    });
+  </script>
+</body>
+</html>

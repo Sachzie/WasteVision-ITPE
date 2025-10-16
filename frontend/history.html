@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WasteVision — History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+  <div id="component-navbar"></div>
+
+  <div class="app-shell">
+    <div id="component-sidebar"></div>
+    <main class="main-content">
+      <header class="page-header">
+        <h2>Detection History</h2>
+      </header>
+
+      <section class="card">
+        <div id="historyContainer" class="history-grid">No history yet.</div>
+      </section>
+    </main>
+  </div>
+
+  <div id="component-footer"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      await main.loadComponents();
+      dashboard.loadHistoryPage();
+    });
+  </script>
+</body>
+</html>

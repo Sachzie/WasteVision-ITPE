@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WasteVision — Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div id="component-navbar"></div>
+
+  <div class="app-shell">
+    <div id="component-sidebar"></div>
+
+    <main class="main-content">
+      <header class="page-header">
+        <h2>Your Profile</h2>
+      </header>
+
+      <section class="card profile-card">
+        <label>Full name
+          <input id="profileName" type="text" />
+        </label>
+
+        <label>Email
+          <input id="profileEmail" type="email" disabled />
+        </label>
+
+        <div class="controls">
+          <button id="saveProfileBtn" class="btn-primary">Save changes</button>
+          <button id="deleteAccountBtn" class="btn-danger">Delete account</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="component-footer"></div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/profile.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      await main.loadComponents();
+      profile.init();
+    });
+  </script>
+</body>
+</html>

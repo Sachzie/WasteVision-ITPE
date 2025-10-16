@@ -1,0 +1,17 @@
+.grid{display:grid;grid-template-columns:1fr 1fr 320px;gap:18px;align-items:start}
+.upload-card .controls{display:flex;gap:10px;margin-top:10px;align-items:center}
+.result-content{min-height:120px}
+.tips-card ul{padding-left:18px;margin:0}
+.recent-list{display:flex;gap:10px;flex-wrap:wrap}
+.recent-item{width:140px;height:120px;background:#fafafa;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center}
+.history-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.profile-card label{display:block;margin-bottom:8px}
+.profile-card input{width:100%;padding:8px;border-radius:8px;border:1px solid #eee;margin-bottom:10px}
+.sidebar{width:240px;background:linear-gradient(180deg,#1e3c24,#2f855a);color:#fff;min-height:100vh;padding:18px;position:fixed}
+.app-shell .main-content{margin-left:240px}
+.sidebar .nav-list{list-style:none;padding:8px 0;margin:18px 0}
+.sidebar .nav-list li{margin:8px 0}
+.sidebar .nav-list a{color:#dff6e6;display:block;padding:8px;border-radius:8px}
+.hamburger{background:transparent;border:none;font-size:18px;cursor:pointer}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:transparent;border-bottom:1px solid rgba(0,0,0,0.04)}
+.footer{text-align:center;padding:18px;color:var(--muted);font-size:13px}

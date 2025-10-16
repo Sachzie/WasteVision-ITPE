@@ -1,0 +1,25 @@
+:root{
+  --bg:#f5f7f8;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#2f855a; /* green */
+  --accent-2:#276749;
+  --shadow:0 6px 18px rgba(16,24,40,0.06);
+  --radius:12px;
+  --glass: rgba(255,255,255,0.6);
+  font-synthesis: none;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial; background:var(--bg); color:#111;}
+a{color:var(--accent); text-decoration:none;}
+.app-shell{display:flex; min-height:100vh;}
+.main-content{flex:1;padding:28px 32px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.btn-primary{background:linear-gradient(180deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+.btn-outline{background:transparent;border:1px solid #ddd;padding:8px 12px;border-radius:8px;cursor:pointer}
+.btn-danger{background:#ef4444;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+.muted{color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.brand{font-size:22px;margin:0;color:var(--accent)}
+.preview-img{max-width:100%;border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,0.08)}
