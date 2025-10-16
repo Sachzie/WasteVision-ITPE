@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         alert("Registration successful!");
         // Optionally redirect to login
-        window.location.href = "index.html";
+        window.location.href = "login.html";
       } else {
         alert(data.message || "Registration failed. Please try again.");
       }
