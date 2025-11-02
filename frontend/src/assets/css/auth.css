@@ -506,3 +506,62 @@ body {
 .password-wrapper .form-input.input-success {
   padding-right: 7rem;
 }
+/* Add this to your existing auth.css file */
+
+.btn-home {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: #006400;
+  text-decoration: none;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.btn-home:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-home:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-home span {
+  display: none;
+}
+
+.btn-home i {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.btn-home:hover i {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .btn-home {
+    width: 44px;
+    height: 44px;
+    top: 15px;
+    right: 15px;
+  }
+  
+  .btn-home i {
+    font-size: 18px;
+  }
+}

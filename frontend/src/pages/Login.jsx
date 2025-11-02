@@ -57,7 +57,7 @@ function Login({ setIsAuthenticated }) {
           playsInline
           className="auth-video-bg"
         >
-          <source src="animation.mp4" type="video/mp4" />
+          <source src="/animation.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
@@ -71,6 +71,12 @@ function Login({ setIsAuthenticated }) {
       </div>
       
       <div className="auth-right">
+        {/* Home Button */}
+        <Link to="/" className="btn-home">
+          <i className="fas fa-home"></i>
+          <span>Back to Home</span>
+        </Link>
+
         <div className="auth-card">
           <div className="auth-header">
             <h2>Welcome Back</h2>

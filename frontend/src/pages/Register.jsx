@@ -67,7 +67,7 @@ function Register() {
           playsInline
           className="auth-video-bg"
         >
-          <source src="animation.mp4" type="video/mp4" />
+          <source src="/animation.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
@@ -81,6 +81,12 @@ function Register() {
       </div>
       
       <div className="auth-right">
+        {/* Home Button */}
+        <Link to="/" className="btn-home">
+          <i className="fas fa-home"></i>
+          <span>Back to Home</span>
+        </Link>
+
         <div className="auth-card">
           <div className="auth-header">
             <h2>Create Account</h2>
@@ -104,6 +110,7 @@ function Register() {
           >
             {({ errors, touched, isSubmitting }) => (
               <Form className="auth-form">
+                {/* ...existing form fields... */}
                 <div className="form-group">
                   <label htmlFor="name">Full Name</label>
                   <div className="input-wrapper">
