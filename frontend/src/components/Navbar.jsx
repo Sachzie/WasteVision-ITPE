@@ -67,6 +67,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
               <>
               <li><Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link></li>
               <li><Link to="/history" onClick={() => setIsMenuOpen(false)}>History</Link></li>
+              <li><Link to="/profile" onClick={() => setIsMenuOpen(false)}>Profile</Link></li>
               </>
             )}
           </ul>
