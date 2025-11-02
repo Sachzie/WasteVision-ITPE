@@ -16,7 +16,7 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
       <section className="about-hero">
         <div className="about-hero-content">
           <h1>About WasteVision</h1>
-          <p>Pioneering Smart Waste Management Through AI Innovation</p>
+          <p>A Student Innovation Project for Smart Waste Management</p>
         </div>
       </section>
 
@@ -29,10 +29,10 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             </div>
             <h2>Our Mission</h2>
             <p>
-              To revolutionize waste management through artificial intelligence, 
-              making sustainable living accessible and effortless for everyone. 
-              We strive to reduce environmental impact by empowering communities 
-              with smart waste segregation technology.
+              To develop an accessible AI-powered solution that helps students and 
+              communities properly classify waste materials. Our project aims to make 
+              recycling easier and more effective by using technology everyone can use—
+              just take a photo, and our system tells you exactly how to dispose of it.
             </p>
           </div>
           
@@ -42,10 +42,11 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             </div>
             <h2>Our Vision</h2>
             <p>
-              A world where waste is no longer wasted. We envision a sustainable 
-              future where every piece of waste is properly classified, recycled, 
-              and repurposed, contributing to a cleaner, greener planet for 
-              generations to come.
+              We envision a campus and community where waste sorting becomes second 
+              nature through smart technology. By combining our academic knowledge 
+              with practical AI solutions, we hope to inspire other students to use 
+              technology for environmental good and create lasting change in waste 
+              management practices.
             </p>
           </div>
         </div>
@@ -56,31 +57,29 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
         <div className="story-content">
           <div className="story-text">
             <span className="section-tag">Our Story</span>
-            <h2>The Journey to Sustainable Innovation</h2>
+            <h2>From Idea to Working Solution</h2>
             <p>
-              WasteVision was born from a simple observation: the world generates 
-              over 2 billion tons of waste annually, and improper waste segregation 
-              remains a critical challenge in achieving sustainability goals.
+              WasteVision was born from a simple observation by students at 
+              Technological University of the Philippines: waste segregation is 
+              confusing. Even with clearly labeled bins, many people struggle to 
+              know which waste goes where.
             </p>
             <p>
-              Founded in 2023, our team of environmental enthusiasts and AI experts 
-              came together with a shared vision—to harness the power of artificial 
-              intelligence to solve one of humanity's most pressing environmental 
-              challenges. What started as a research project has evolved into a 
-              comprehensive platform that's making a real difference.
+              Our team decided to tackle this problem by combining what we learned 
+              in Computer Science with real-world environmental challenges. We spent 
+              months researching AI models, collecting and labeling waste images, 
+              training our detection system, and building a user-friendly web interface.
             </p>
             <p>
-              Today, WasteVision serves thousands of users, helping them make 
-              informed decisions about waste disposal while contributing to 
-              environmental data collection and analysis. Our AI-powered system 
-              has classified over 100,000 waste items, diverting thousands of 
-              pounds from landfills to proper recycling facilities.
+              This isn't just a school assignment—it's our contribution to solving 
+              a real environmental problem. We're proving that student-led innovations 
+              can create practical solutions that help people make better choices every day.
             </p>
           </div>
           <div className="story-image">
             <img 
               src={hero}
-              alt="Team working on sustainability" 
+              alt="Student innovation in sustainability" 
             />
           </div>
         </div>
@@ -89,16 +88,17 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
       {/* Values Section */}
       <section className="values-section">
         <span className="section-tag">Our Values</span>
-        <h2>What We Stand For</h2>
+        <h2>What Drives Our Project</h2>
         <div className="values-grid">
           <div className="value-card">
             <div className="value-icon">
               <i className="fas fa-leaf"></i>
             </div>
-            <h3>Sustainability</h3>
+            <h3>Environmental Impact</h3>
             <p>
-              We're committed to creating solutions that promote long-term 
-              environmental health and sustainable practices.
+              We're passionate about making a real difference. Every correctly 
+              sorted piece of waste contributes to a cleaner environment and 
+              more sustainable future.
             </p>
           </div>
           
@@ -106,10 +106,11 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             <div className="value-icon">
               <i className="fas fa-lightbulb"></i>
             </div>
-            <h3>Innovation</h3>
+            <h3>Practical Learning</h3>
             <p>
-              We leverage cutting-edge AI technology to continuously improve 
-              waste classification accuracy and user experience.
+              As students, we believe in learning by building. This project let us 
+              apply AI, web development, and environmental science to solve a 
+              real-world problem.
             </p>
           </div>
           
@@ -117,10 +118,10 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             <div className="value-icon">
               <i className="fas fa-users"></i>
             </div>
-            <h3>Community</h3>
+            <h3>Community First</h3>
             <p>
-              We believe in the power of collective action and building a 
-              community of environmentally conscious individuals.
+              We built this for our fellow students and community. Making waste 
+              sorting easier for everyone is what drives our development decisions.
             </p>
           </div>
           
@@ -128,10 +129,10 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             <div className="value-icon">
               <i className="fas fa-chart-line"></i>
             </div>
-            <h3>Transparency</h3>
+            <h3>Simplicity</h3>
             <p>
-              We provide clear insights and data-driven recommendations to 
-              help users understand their environmental impact.
+              Proper waste disposal shouldn't be complicated. Just snap a photo, 
+              and our AI tells you exactly what to do—no manuals needed.
             </p>
           </div>
           
@@ -141,8 +142,8 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             </div>
             <h3>Accessibility</h3>
             <p>
-              We make sustainable waste management simple and accessible to 
-              everyone, regardless of technical expertise.
+              Everyone should have access to smart waste sorting. Our tool works 
+              on any device with a camera and internet connection.
             </p>
           </div>
           
@@ -150,10 +151,10 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
             <div className="value-icon">
               <i className="fas fa-shield-alt"></i>
             </div>
-            <h3>Integrity</h3>
+            <h3>Continuous Growth</h3>
             <p>
-              We operate with honesty and accountability, ensuring our 
-              recommendations are based on accurate data and research.
+              We're constantly improving our AI model and adding new features based 
+              on user feedback and testing results.
             </p>
           </div>
         </div>
@@ -170,28 +171,30 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
           </div>
           <div className="technology-text">
             <span className="section-tag">Our Technology</span>
-            <h2>AI-Powered Waste Classification</h2>
+            <h2>How WasteVision Works</h2>
             <p>
-              At the heart of WasteVision is our advanced YOLOv5-based deep 
-              learning model, trained on thousands of waste images to accurately 
-              identify and classify different types of waste materials.
+              We implemented YOLOv5, a state-of-the-art object detection model, as 
+              the core of our waste classification system. We trained it on hundreds 
+              of waste images to accurately recognize different materials—plastic, 
+              paper, metal, glass, organic waste, and more. The AI analyzes your 
+              photo and provides instant classification results!
             </p>
             <div className="tech-features">
               <div className="tech-feature">
                 <i className="fas fa-check-circle"></i>
-                <span>95%+ Classification Accuracy</span>
+                <span>Custom-trained on 500+ waste images</span>
               </div>
               <div className="tech-feature">
                 <i className="fas fa-check-circle"></i>
-                <span>Real-time Image Processing</span>
+                <span>Real-time image analysis</span>
               </div>
               <div className="tech-feature">
                 <i className="fas fa-check-circle"></i>
-                <span>Continuous Model Improvement</span>
+                <span>Works on mobile & desktop</span>
               </div>
               <div className="tech-feature">
                 <i className="fas fa-check-circle"></i>
-                <span>Multi-category Detection</span>
+                <span>Detects multiple waste items</span>
               </div>
             </div>
           </div>
@@ -200,24 +203,24 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
 
       {/* Impact Section */}
       <section className="impact-section">
-        <span className="section-tag">Our Impact</span>
-        <h2>Making a Difference Together</h2>
+        <span className="section-tag">Project Impact</span>
+        <h2>What We've Achieved</h2>
         <div className="impact-stats">
           <div className="impact-stat">
-            <h3>100K+</h3>
-            <p>Items Classified</p>
+            <h3>500+</h3>
+            <p>Test Classifications</p>
           </div>
           <div className="impact-stat">
-            <h3>5K+</h3>
-            <p>Active Users</p>
+            <h3>50+</h3>
+            <p>Beta Testers</p>
           </div>
           <div className="impact-stat">
-            <h3>50K+</h3>
-            <p>Tons Recycled</p>
+            <h3>85%</h3>
+            <p>Accuracy Rate</p>
           </div>
           <div className="impact-stat">
-            <h3>30%</h3>
-            <p>Waste Reduction</p>
+            <h3>6</h3>
+            <p>Waste Categories</p>
           </div>
         </div>
       </section>
@@ -225,54 +228,54 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
       {/* Team Section */}
       <section className="team-section">
         <span className="section-tag">Our Team</span>
-        <h2>Meet the People Behind WasteVision</h2>
+        <h2>The Students Behind WasteVision</h2>
         <div className="team-grid">
           <div className="team-card">
             <div className="team-image">
               <img 
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300" 
-                alt={alt}
+                alt="Team member"
               />
             </div>
-            <h3>bridget andersen</h3>
-            <p className="team-role">CEO & Co-Founder</p>
-            <p className="team-bio">Environmental scientist with 15+ years of experience</p>
+            <h3>Bridget Andersen</h3>
+            <p className="team-role">Project Lead & Adviser</p>
+            <p className="team-bio">Faculty adviser guiding the development and research</p>
           </div>
           
           <div className="team-card">
             <div className="team-image">
               <img 
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" 
-                alt={alt}
+                alt="Team member"
               />
             </div>
-            <h3>student 1</h3>
-            <p className="team-role">CTO & Co-Founder</p>
-            <p className="team-bio">AI researcher specializing in computer vision</p>
+            <h3>AI Model Developer</h3>
+            <p className="team-role">Machine Learning Lead</p>
+            <p className="team-bio">Training and optimizing the YOLOv5 detection model</p>
           </div>
           
           <div className="team-card">
             <div className="team-image">
               <img 
                 src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300" 
-                alt={alt}
+                alt="Team member"
               />
             </div>
-            <h3>student 2</h3>
-            <p className="team-role">Head of Engineering</p>
-            <p className="team-bio">Full-stack developer passionate about sustainability</p>
+            <h3>Full-Stack Developer</h3>
+            <p className="team-role">Web Development Lead</p>
+            <p className="team-bio">Building the web interface and backend systems</p>
           </div>
           
           <div className="team-card">
             <div className="team-image">
               <img 
                 src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300" 
-                alt={alt}
+                alt="Team member"
               />
             </div>
-            <h3>student 3</h3>
-            <p className="team-role">Head of Operations</p>
-            <p className="team-bio">Operations expert with sustainability focus</p>
+            <h3>Research Lead</h3>
+            <p className="team-role">Testing & Documentation</p>
+            <p className="team-bio">User research, testing, and project documentation</p>
           </div>
         </div>
       </section>
@@ -280,8 +283,8 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
       {/* CTA Section */}
       <section className="about-cta-section">
         <div className="about-cta-content">
-          <h2>Ready to Make a Difference?</h2>
-          <p>Join thousands of users who are contributing to a cleaner, greener planet</p>
+          <h2>Try WasteVision Today!</h2>
+          <p>Help us improve by testing our system—your feedback matters</p>
           <div className="about-cta-buttons">
             <Link to="/register" className="btn-primary">Get Started</Link>
             <Link to="/tips" className="btn-secondary">Learn More</Link>
