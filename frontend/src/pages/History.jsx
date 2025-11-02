@@ -4,7 +4,8 @@ import Footer from '../components/Footer'
 import { apiService } from '../services/api'
 import toast from 'react-hot-toast'
 import '../assets/css/history.css'
-import { exportHistoryToPDF } from '../services/pdfExport';
+import { exportHistoryToPDF } from '../services/pdfExport'
+import { exportRecordDetailToPDF } from '../services/pdfModalExport'
 
 function History({ isAuthenticated, setIsAuthenticated }) {
   const [history, setHistory] = useState([])
@@ -15,7 +16,8 @@ function History({ isAuthenticated, setIsAuthenticated }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [recordToDelete, setRecordToDelete] = useState(null)
   const [deleting, setDeleting] = useState(false)
-  const [exportingPDF, setExportingPDF] = useState(false);
+  const [exportingPDF, setExportingPDF] = useState(false)
+  const [exportingRecordPDF, setExportingRecordPDF] = useState(false)
 
   useEffect(() => {
     fetchHistory()
@@ -101,36 +103,66 @@ function History({ isAuthenticated, setIsAuthenticated }) {
 
   const handleExportPDF = async () => {
     if (history.length === 0) {
-      toast.error('No classification history to export');
-      return;
+      toast.error('No classification history to export')
+      return
     }
 
-    setExportingPDF(true);
-    const loadingToast = toast.loading('🔄 Generating PDF report...');
+    setExportingPDF(true)
+    const loadingToast = toast.loading('🔄 Generating PDF report...')
 
     try {
-      const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+      const userInfo = JSON.parse(localStorage.getItem('user') || '{}')
       
-      const result = await exportHistoryToPDF(history, userInfo);
+      const result = await exportHistoryToPDF(history, userInfo)
       
       if (result.success) {
         toast.success(`📄 PDF exported successfully: ${result.fileName}`, {
           id: loadingToast,
           duration: 4000
-        });
+        })
       } else {
-        throw new Error(result.error);
+        throw new Error(result.error)
       }
     } catch (error) {
-      console.error('Error exporting PDF:', error);
+      console.error('Error exporting PDF:', error)
       toast.error('Failed to export PDF. Please try again.', {
         id: loadingToast,
         duration: 5000
-      });
+      })
     } finally {
-      setExportingPDF(false);
+      setExportingPDF(false)
     }
-  };
+  }
+
+  const handleExportRecordPDF = async () => {
+    if (!selectedRecord) return
+
+    setExportingRecordPDF(true)
+    const loadingToast = toast.loading('🔄 Generating PDF report...')
+
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('user') || '{}')
+      
+      const result = await exportRecordDetailToPDF(selectedRecord, userInfo)
+      
+      if (result.success) {
+        toast.success(`📄 PDF exported successfully: ${result.fileName}`, {
+          id: loadingToast,
+          duration: 4000
+        })
+      } else {
+        throw new Error(result.error)
+      }
+    } catch (error) {
+      console.error('Error exporting PDF:', error)
+      toast.error('Failed to export PDF. Please try again.', {
+        id: loadingToast,
+        duration: 5000
+      })
+    } finally {
+      setExportingRecordPDF(false)
+    }
+  }
 
   return (
     <div className="history-container">
@@ -249,7 +281,31 @@ function History({ isAuthenticated, setIsAuthenticated }) {
           <div className="modal-content-large" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Classification Details</h3>
-              <button className="modal-close" onClick={closeModal}>×</button>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button 
+                  className="btn-export-pdf"
+                  onClick={handleExportRecordPDF}
+                  disabled={exportingRecordPDF}
+                  style={{ 
+                    padding: '8px 15px', 
+                    fontSize: '14px',
+                    minWidth: '140px'
+                  }}
+                >
+                  {exportingRecordPDF ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Exporting...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-file-pdf"></i>
+                      Export PDF
+                    </>
+                  )}
+                </button>
+                <button className="modal-close" onClick={closeModal}>×</button>
+              </div>
             </div>
             <div className="modal-body-large">
               <div className="detail-images">

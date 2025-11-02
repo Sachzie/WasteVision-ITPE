@@ -160,6 +160,8 @@ exports.deleteRecord = async (req, res) => {
   }
 };
 
+
+
 exports.getUserStatistics = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -199,15 +201,18 @@ exports.getUserStatistics = async (req, res) => {
           stats.categoryBreakdown[category] = (stats.categoryBreakdown[category] || 0) + 1;
           
           // Sum up confidence (stored as decimal 0-1, convert to percentage)
-          const confidencePercent = (parseFloat(item.confidence) || 0) * 100;
+          const confidenceValue = parseFloat(item.confidence) || 0;
+          // If value is less than or equal to 1, it's a decimal, multiply by 100
+          // If value is greater than 1, it's already a percentage
+          const confidencePercent = confidenceValue <= 1 ? confidenceValue * 100 : confidenceValue;
           totalConfidence += confidencePercent;
         });
       }
     });
     
-    // Calculate average confidence as percentage
+    // Calculate average confidence as whole number (0-100)
     stats.averageConfidence = totalItems > 0 
-      ? (totalConfidence / totalItems).toFixed(1) 
+      ? Math.round(totalConfidence / totalItems)
       : 0;
     
     // Get most common category
