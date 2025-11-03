@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { apiService } from '../services/api'
 import { saveToken, saveUser } from '../services/auth'
 import '../assets/css/auth.css'
+import animation  from '../assets/vid/animation.mp4'
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -57,7 +58,7 @@ function Login({ setIsAuthenticated }) {
           playsInline
           className="auth-video-bg"
         >
-          <source src="/animation.mp4" type="video/mp4" />
+          <source src={animation} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         

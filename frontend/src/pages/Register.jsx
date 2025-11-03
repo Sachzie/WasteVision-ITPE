@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import toast from 'react-hot-toast'
 import { apiService } from '../services/api'
 import '../assets/css/auth.css'
+import animation  from '../assets/vid/animation.mp4'
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string()
@@ -67,7 +68,7 @@ function Register() {
           playsInline
           className="auth-video-bg"
         >
-          <source src="/animation.mp4" type="video/mp4" />
+          <source src={animation} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
