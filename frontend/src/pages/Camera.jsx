@@ -203,38 +203,42 @@ const startCamera = async () => {
   }
 
   // Take snapshot for cropping
-  const takeSnapshot = useCallback(() => {
-    if (!videoRef.current || !canvasRef.current) {
-      toast.error('Camera not ready')
-      return
-    }
+const takeSnapshot = useCallback(() => {
+  if (!videoRef.current || !canvasRef.current) {
+    toast.error('Camera not ready')
+    return
+  }
 
-    const video = videoRef.current
-    const canvas = canvasRef.current
-    
-    if (video.paused || video.ended || video.readyState < 2) {
-      toast.error('Video not ready.')
-      return
-    }
-    
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    
-    const context = canvas.getContext('2d')
-    
-    // Draw unmirrored image
-    context.save()
-    context.scale(-1, 1)
-    context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height)
-    context.restore()
-    
-    const imageUrl = canvas.toDataURL('image/jpeg', 0.92)
-    setCapturedSnapshot(imageUrl)
-    setIsCropping(true)
-    setCropBox({ x: 15, y: 15, width: 70, height: 70 }) // Reset crop box
-    
-    toast.success('📸 Snapshot taken! Adjust the crop box and click "Crop & Use"', { duration: 3000 })
-  }, [])
+  const video = videoRef.current
+  const canvas = canvasRef.current
+  
+  if (video.paused || video.ended || video.readyState < 2) {
+    toast.error('Video not ready.')
+    return
+  }
+  
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
+  
+  const context = canvas.getContext('2d')
+  
+  // Draw unmirrored image
+  context.save()
+  context.scale(-1, 1)
+  context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height)
+  context.restore()
+  
+  const imageUrl = canvas.toDataURL('image/jpeg', 0.92)
+  setCapturedSnapshot(imageUrl)
+  setIsCropping(true)
+  
+  // LARGER default crop box to show full image clearly
+  setCropBox({ x: 5, y: 5, width: 90, height: 90 })
+  
+  toast.success('📸 Snapshot taken! Adjust the crop box and click "Crop & Use"', { duration: 3000 })
+}, [])
+
+
 
   // Handle crop box dragging
   const handleMouseDown = (e, corner = null) => {
@@ -331,40 +335,44 @@ const startCamera = async () => {
  
 
   // Crop and finalize
-  const applyCrop = useCallback(() => {
-    if (!capturedSnapshot || !cropCanvasRef.current) {
-      toast.error('No snapshot to crop')
-      return
-    }
+const applyCrop = useCallback(() => {
+  if (!capturedSnapshot || !cropCanvasRef.current) {
+    toast.error('No snapshot to crop')
+    return
+  }
 
-    const img = new Image()
-    img.onload = () => {
+  const img = new Image()
+  img.onload = () => {
+    try {
       const canvas = cropCanvasRef.current
       const cropX = (cropBox.x / 100) * img.width
       const cropY = (cropBox.y / 100) * img.height
       const cropWidth = (cropBox.width / 100) * img.width
       const cropHeight = (cropBox.height / 100) * img.height
       
+      console.log('🔍 Crop Calculations:', {
+        imageSize: `${img.width}x${img.height}`,
+        cropBox: cropBox,
+        cropPixels: `x:${cropX}, y:${cropY}, w:${cropWidth}, h:${cropHeight}`
+      })
+      
       // Calculate optimal output size (maintain aspect ratio, min 640px)
       const aspectRatio = cropWidth / cropHeight
       let outputWidth, outputHeight
       
       if (aspectRatio > 1) {
-        // Wider than tall
         outputWidth = Math.max(640, cropWidth)
         outputHeight = outputWidth / aspectRatio
       } else {
-        // Taller than wide
         outputHeight = Math.max(640, cropHeight)
         outputWidth = outputHeight * aspectRatio
       }
       
-      // Ensure minimum size for ML model
       outputWidth = Math.max(640, outputWidth)
       outputHeight = Math.max(640, outputHeight)
       
-      canvas.width = outputWidth
-      canvas.height = outputHeight
+      canvas.width = Math.round(outputWidth)
+      canvas.height = Math.round(outputHeight)
       
       const context = canvas.getContext('2d')
       
@@ -379,14 +387,13 @@ const startCamera = async () => {
       // Draw the cropped portion with proper scaling
       context.drawImage(
         img,
-        cropX, cropY, cropWidth, cropHeight,
+        Math.round(cropX), Math.round(cropY), Math.round(cropWidth), Math.round(cropHeight),
         0, 0, canvas.width, canvas.height
       )
       
-      // Convert to data URL with maximum quality (NOT blob/File)
       const croppedImageDataUrl = canvas.toDataURL('image/jpeg', 0.98)
       
-      console.log('✅ Image cropped and optimized for ML:', {
+      console.log('✅ Image cropped successfully:', {
         dimensions: `${canvas.width}x${canvas.height}`,
         cropArea: `${cropBox.width.toFixed(1)}% x ${cropBox.height.toFixed(1)}%`,
         aspectRatio: aspectRatio.toFixed(2),
@@ -394,24 +401,27 @@ const startCamera = async () => {
         dataUrlLength: croppedImageDataUrl.length
       })
       
-      // Clean up
       stopCamera()
       setCapturedSnapshot(null)
       setIsCropping(false)
       
-      // Pass ONLY data URL to parent component (Dashboard expects this format)
+      // Pass cropped image to parent
       onCapture(croppedImageDataUrl)
       
       toast.success('✂️ Image cropped and ready for classification!', { duration: 3000 })
+    } catch (error) {
+      console.error('❌ Crop error:', error)
+      toast.error('Failed to crop image. Please try again.')
     }
-    
-    img.onerror = () => {
-      toast.error('Failed to load snapshot for cropping')
-      console.error('Image load error')
-    }
-    
-    img.src = capturedSnapshot
-  }, [capturedSnapshot, cropBox, onCapture, stopCamera])
+  }
+  
+  img.onerror = () => {
+    toast.error('Failed to load snapshot for cropping')
+    console.error('Image load error')
+  }
+  
+  img.src = capturedSnapshot
+}, [capturedSnapshot, cropBox, onCapture, stopCamera])
 
   const cancelCrop = () => {
     setCapturedSnapshot(null)

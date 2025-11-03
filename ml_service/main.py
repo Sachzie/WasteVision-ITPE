@@ -74,8 +74,8 @@ except Exception as e:
     raise
 
 # Detection configuration - OPTIMIZED FOR CAMERA CAPTURES
-CONF_THRESHOLD = 0.30  # Increased to reduce false positives
-IOU_THRESHOLD = 0.45   # Increased to reduce overlapping boxes
+CONF_THRESHOLD = 0.25  # Increased to reduce false positives
+IOU_THRESHOLD = 0.35   # Increased to reduce overlapping boxes
 MAX_DETECTIONS = 100   # Reasonable limit for performance
 
 # Image preprocessing configuration

@@ -6,6 +6,10 @@ import '../assets/css/about.css';
 import hero from '../assets/img/group-multi-colored-trash-cans-are-sidewalk_921860-178361.jpg';
 import img1 from '../assets/img/img1.jpg'
 import alt from '../assets/img/OIP.jpg'
+import hazel from '../assets/img/hazel.jpg'
+import sachzie from '../assets/img/sachzie.jpg'
+import michael from '../assets/img/michael.jpg'
+import drew from '../assets/img/drew.jpg'
 
 const About = ({ isAuthenticated, setIsAuthenticated }) => {
   return (
@@ -233,49 +237,45 @@ const About = ({ isAuthenticated, setIsAuthenticated }) => {
           <div className="team-card">
             <div className="team-image">
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300" 
+                src={sachzie}
                 alt="Team member"
               />
             </div>
-            <h3>Bridget Andersen</h3>
-            <p className="team-role">Project Lead & Adviser</p>
-            <p className="team-bio">Faculty adviser guiding the development and research</p>
+            <h3>Sachzie Sofia Ilagan</h3>
+            <p className="team-role">Full Stack Developer</p>
           </div>
           
           <div className="team-card">
             <div className="team-image">
               <img 
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" 
+                src={hazel}
                 alt="Team member"
               />
             </div>
-            <h3>AI Model Developer</h3>
-            <p className="team-role">Machine Learning Lead</p>
-            <p className="team-bio">Training and optimizing the YOLOv5 detection model</p>
+            <h3>Hazel Anne Elumba</h3>
+            <p className="team-role">Frontend Developer</p>
           </div>
           
           <div className="team-card">
             <div className="team-image">
               <img 
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300" 
+                src={michael}
                 alt="Team member"
               />
             </div>
-            <h3>Full-Stack Developer</h3>
-            <p className="team-role">Web Development Lead</p>
-            <p className="team-bio">Building the web interface and backend systems</p>
+            <h3>John Michael Danque</h3>
+            <p className="team-role">Frontend Developer</p>
           </div>
           
           <div className="team-card">
             <div className="team-image">
               <img 
-                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300" 
+                src={drew}
                 alt="Team member"
               />
             </div>
-            <h3>Research Lead</h3>
-            <p className="team-role">Testing & Documentation</p>
-            <p className="team-bio">User research, testing, and project documentation</p>
+            <h3>Deannuel Drew Cortez</h3>
+            <p className="team-role">Backend Developer</p>
           </div>
         </div>
       </section>
