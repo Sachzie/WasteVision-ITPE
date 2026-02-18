@@ -19,6 +19,11 @@ function Dashboard({ isAuthenticated, setIsAuthenticated }) {
   const [userStats, setUserStats] = useState(null)
   const [statsLoading, setStatsLoading] = useState(true)
   const [showCamera, setShowCamera] = useState(false)
+  // Reviews state
+  const [reviewRating, setReviewRating] = useState(5)
+  const [reviewComment, setReviewComment] = useState('')
+  const [reviewSubmitting, setReviewSubmitting] = useState(false)
+  const [myReviews, setMyReviews] = useState([])
 
   // Fetch user statistics on component mount
   useEffect(() => {
@@ -37,6 +42,16 @@ function Dashboard({ isAuthenticated, setIsAuthenticated }) {
 
     if (isAuthenticated) {
       fetchUserStatistics()
+      // Fetch user's reviews
+      ;(async () => {
+        try {
+          const res = await apiService.getMyReviews()
+          const list = res.data?.reviews || []
+          setMyReviews(list)
+        } catch (err) {
+          console.error('Error fetching reviews:', err)
+        }
+      })()
     }
   }, [isAuthenticated])
 
@@ -195,6 +210,31 @@ function Dashboard({ isAuthenticated, setIsAuthenticated }) {
     toast.info('Camera reopened. Take a new photo.', {
       duration: 2000,
     })
+  }
+
+  const handleSubmitReview = async () => {
+    if (!reviewRating || !reviewComment.trim()) {
+      toast.error('Please provide a rating and comment')
+      return
+    }
+    try {
+      setReviewSubmitting(true)
+      const payload = { rating: Number(reviewRating), comment: reviewComment.trim() }
+      const res = await apiService.submitReview(payload)
+      toast.success('Thanks for your feedback! Pending approval')
+      // Update local list
+      const newReview = res.data?.review
+      if (newReview) {
+        setMyReviews(prev => [newReview, ...prev])
+      }
+      setReviewRating(5)
+      setReviewComment('')
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to submit review'
+      toast.error(msg)
+    } finally {
+      setReviewSubmitting(false)
+    }
   }
 
   return (
@@ -535,6 +575,77 @@ function Dashboard({ isAuthenticated, setIsAuthenticated }) {
           </div>
         </section>
       )}
+
+      {/* Reviews Section */}
+      <section className="dashboard-reviews-section">
+        <div className="review-section">
+          <div className="review-header">
+            <h3>📝 Share Your Feedback</h3>
+            <p>
+              Tell us what you think about WasteVision. Your review helps us improve.
+            </p>
+          </div>
+
+          <div className="review-form">
+            <div className="form-field field-rating">
+              <label htmlFor="rating">Rating</label>
+              <select
+                id="rating"
+                value={reviewRating}
+                onChange={(e) => setReviewRating(e.target.value)}
+                className="form-input"
+              >
+                {[5,4,3,2,1].map(r => (
+                  <option key={r} value={r}>{r} ⭐</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-field field-comment">
+              <label htmlFor="comment">Comment</label>
+              <textarea
+                id="comment"
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                className="form-input"
+                placeholder="Share your experience, suggestions, or issues..."
+              />
+            </div>
+            <div className="form-actions">
+              <button
+                onClick={handleSubmitReview}
+                className="btn btn-primary"
+                disabled={reviewSubmitting}
+              >
+                {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
+              </button>
+            </div>
+          </div>
+
+          <div className="my-reviews">
+            <h4>📣 Your Reviews</h4>
+            {myReviews.length === 0 ? (
+              <p className="reviews-empty">You haven’t posted any reviews yet.</p>
+            ) : (
+              <div className="reviews-list">
+                {myReviews.map(rv => (
+                  <div key={rv._id} className="review-card">
+                    <div className="review-card-top">
+                      <span className="review-rating">{rv.rating} ⭐</span>
+                      <span className={`status-badge ${rv.status}`}>
+                        {rv.status}
+                      </span>
+                    </div>
+                    <p className="review-comment">{rv.comment}</p>
+                    <div className="review-date">
+                      {new Date(rv.createdAt).toLocaleString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>

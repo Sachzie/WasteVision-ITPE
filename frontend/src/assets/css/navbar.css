@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 40px;
+  padding: 28px 48px;
 }
 
 /* Logo Styles */
@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 2rem;
+  font-size: 2.6rem;
   font-weight: 800;
   text-decoration: none;
   transition: transform 0.3s ease;
@@ -70,7 +70,7 @@
 .navbar-menu {
   display: flex;
   list-style: none;
-  gap: 40px;
+  gap: 48px;
   margin: 0;
   padding: 0;
 }
@@ -83,7 +83,8 @@
   color: #2d3748;
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 1.3rem;
+  line-height: 1.5;
   transition: color 0.3s ease;
   position: relative;
 }
@@ -112,10 +113,10 @@
   background: #ff6b35;
   color: white;
   border: none;
-  padding: 14px 32px;
+  padding: 16px 36px;
   border-radius: 30px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
@@ -167,7 +168,7 @@
   }
 
   .navbar-container {
-    padding: 20px 25px;
+    padding: 22px 28px;
   }
 
   .menu-toggle {
@@ -188,6 +189,11 @@
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease;
     border-radius: 0;
+  }
+
+  .navbar-menu a {
+    font-size: 1.2rem;
+    line-height: 1.6;
   }
 
   .navbar-menu.active {
@@ -211,16 +217,20 @@
   }
 
   .navbar-container {
-    padding: 18px 20px;
+    padding: 20px 22px;
   }
 
   .navbar-logo {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 
   .navbar-cta {
-    padding: 10px 22px;
-    font-size: 0.9rem;
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+
+  .navbar-menu a {
+    font-size: 1.1rem;
   }
 }
 
@@ -228,23 +238,23 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 20px;
+  padding: 12px 22px;
 }
 
 .navbar-username {
   color: #2d3748;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 
 .navbar-logout-btn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid #e53e3e;
   background-color: #fff;
   color: #e53e3e;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;

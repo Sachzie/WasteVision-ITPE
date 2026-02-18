@@ -35,7 +35,8 @@ function Register() {
       await apiService.register({
         name: values.name,
         email: values.email,
-        password: values.password
+        password: values.password,
+        role: values.role
       })
       
       toast.success('Registration successful! Redirecting to login...', {
@@ -102,14 +103,15 @@ function Register() {
               confirmPassword: '',
               agreeToTerms: false,
               showPassword: false,
-              showConfirmPassword: false
+              showConfirmPassword: false,
+              role: 'user'
             }}
             validationSchema={RegisterSchema}
             onSubmit={handleSubmit}
             validateOnChange={true}
             validateOnBlur={true}
           >
-            {({ errors, touched, isSubmitting }) => (
+            {({ errors, touched, isSubmitting, values }) => (
               <Form className="auth-form">
                 {/* ...existing form fields... */}
                 <div className="form-group">
@@ -268,6 +270,20 @@ function Register() {
                     </Field>
                   </div>
                   <ErrorMessage name="confirmPassword" component="div" className="error-message" />
+                </div>
+
+                <div className="form-group">
+                  <label>Account Type</label>
+                  <div className="input-wrapper" style={{ display: 'flex', gap: '16px' }}>
+                    <label className="checkbox-label">
+                      <Field type="radio" name="role" value="user" />
+                      <span>User</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <Field type="radio" name="role" value="admin" />
+                      <span>Admin</span>
+                    </label>
+                  </div>
                 </div>
 
                 <div className="terms-agreement">

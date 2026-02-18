@@ -72,6 +72,11 @@ export const apiService = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
   
+  // Admin
+  getAllUsers: () => api.get('/admin/users'),
+  getAllActivities: () => api.get('/admin/activities'),
+  getActivitiesByUser: (id) => api.get(`/admin/users/${id}/activities`),
+  
   // ML Service - Classify Waste
   classifyWasteML: async (imageFile) => {
     const formData = new FormData();
@@ -189,6 +194,15 @@ export const apiService = {
   getUserStatistics: () => api.get('/user/statistics'),
   // Statistics
   getStatistics: () => api.get('/waste/statistics')
+  ,
+  
+  // Reviews - User
+  submitReview: (data) => api.post('/user/reviews', data),
+  getMyReviews: () => api.get('/user/reviews'),
+  
+  // Reviews - Admin
+  getAllReviews: () => api.get('/admin/reviews'),
+  updateReviewStatus: (id, status) => api.put(`/admin/reviews/${id}/status`, { status })
 };
 
 export default api

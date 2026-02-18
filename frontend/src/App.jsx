@@ -6,10 +6,14 @@ import About from './pages/About'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
+import AdminDashboard from './pages/admindashboard'
+import AdminUsers from './pages/AdminUsers'
+import AdminHistory from './pages/AdminHistory'
+import AdminReviews from './pages/AdminReviews'
 import History from './pages/History'
 import Tips from './pages/Tips'
 import Profile from './pages/Profile'
-import { checkAuth } from './services/auth'
+import { checkAuth, getUser } from './services/auth'
 import './App.css'
 
 function App() {
@@ -34,9 +38,28 @@ function App() {
     return isAuthenticated ? children : <Navigate to="/login" replace />
   }
 
-  // Public routes - redirects to dashboard if already logged in
+  // User-only routes - restrict admins and redirect them to admin panel
+  const UserOnlyRoute = ({ children }) => {
+    if (!isAuthenticated) return <Navigate to="/login" replace />
+    const user = getUser()
+    const isAdmin = user?.role === 'admin'
+    return isAdmin ? <Navigate to="/admin" replace /> : children
+  }
+
+  // Public routes - redirect authenticated users by role
   const PublicRoute = ({ children }) => {
-    return isAuthenticated ? <Navigate to="/dashboard" replace /> : children
+    if (!isAuthenticated) return children
+    const user = getUser()
+    const isAdmin = user?.role === 'admin'
+    return <Navigate to={isAdmin ? "/admin" : "/dashboard"} replace />
+  }
+
+  // Admin routes - requires authentication and admin role
+  const AdminRoute = ({ children }) => {
+    if (!isAuthenticated) return <Navigate to="/login" replace />
+    const user = getUser()
+    const isAdmin = user?.role === 'admin'
+    return isAdmin ? children : <Navigate to="/dashboard" replace />
   }
 
   return (
@@ -81,19 +104,39 @@ function App() {
           </PublicRoute>
         } />
         <Route path="/dashboard" element={
-          <PrivateRoute>
+          <UserOnlyRoute>
             <Dashboard isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-          </PrivateRoute>
+          </UserOnlyRoute>
+        } />
+        <Route path="/admin" element={
+          <AdminRoute>
+            <AdminDashboard isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+          </AdminRoute>
+        } />
+        <Route path="/admin/users" element={
+          <AdminRoute>
+            <AdminUsers isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+          </AdminRoute>
+        } />
+        <Route path="/admin/history" element={
+          <AdminRoute>
+            <AdminHistory isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+          </AdminRoute>
+        } />
+        <Route path="/admin/reviews" element={
+          <AdminRoute>
+            <AdminReviews isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+          </AdminRoute>
         } />
         <Route path="/history" element={
-          <PrivateRoute>
+          <UserOnlyRoute>
             <History isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-          </PrivateRoute>
+          </UserOnlyRoute>
         } />
         <Route path="/tips" element={
-          <PrivateRoute>
+          <UserOnlyRoute>
             <Tips isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-          </PrivateRoute>
+          </UserOnlyRoute>
         } />
         <Route path="/profile" element={
           <PrivateRoute>

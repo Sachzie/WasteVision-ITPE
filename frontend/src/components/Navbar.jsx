@@ -7,6 +7,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+// Reuse DashboardIcon for Admin Panel to avoid new imports
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -67,44 +68,73 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
           </button>
 
           <ul className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
-            <li>
-              <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                <HomeIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" onClick={() => setIsMenuOpen(false)}>
-                <InfoIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link to="/tips" onClick={() => setIsMenuOpen(false)}>
-                <LightbulbIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
-                Tips
-              </Link>
-            </li>
-            {isAuthenticated && (
+            {user?.role === 'admin' ? (
               <>
                 <li>
-                  <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                    <DashboardIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
-                    Dashboard
+                  <Link to="/about" onClick={() => setIsMenuOpen(false)}>
+                    <InfoIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
+                    About Us
+                  </Link>
+                </li>
+                {isAuthenticated && (
+                  <>
+                    <li>
+                      <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
+                        <DashboardIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
+                        Admin Panel
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
+                        <PersonIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
+                        Profile
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                    <HomeIcon sx={{ fontSize: 22, marginRight: '7px', verticalAlign: 'middle' }} />
+                    Home
                   </Link>
                 </li>
                 <li>
-                  <Link to="/history" onClick={() => setIsMenuOpen(false)}>
-                    <HistoryIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
-                    History
+                  <Link to="/about" onClick={() => setIsMenuOpen(false)}>
+                    <InfoIcon sx={{ fontSize: 22, marginRight: '7px', verticalAlign: 'middle' }} />
+                    About Us
                   </Link>
                 </li>
                 <li>
-                  <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
-                    <PersonIcon sx={{ fontSize: 18, marginRight: '6px', verticalAlign: 'middle' }} />
-                    Profile
+                  <Link to="/tips" onClick={() => setIsMenuOpen(false)}>
+                    <LightbulbIcon sx={{ fontSize: 22, marginRight: '7px', verticalAlign: 'middle' }} />
+                    Tips
                   </Link>
                 </li>
+                {isAuthenticated && (
+                  <>
+                    <li>
+                      <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                        <DashboardIcon sx={{ fontSize: 22, marginRight: '7px', verticalAlign: 'middle' }} />
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/history" onClick={() => setIsMenuOpen(false)}>
+                        <HistoryIcon sx={{ fontSize: 22, marginRight: '7px', verticalAlign: 'middle' }} />
+                        History
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
+                        <PersonIcon sx={{ fontSize: 22, marginRight: '7px', verticalAlign: 'middle' }} />
+                        Profile
+                      </Link>
+                    </li>
+                  </>
+                )}
               </>
             )}
           </ul>
@@ -112,7 +142,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
           {isAuthenticated ? (
             <div className="navbar-cta navbar-user-section">
               <Link to="/profile" className="navbar-profile-link" onClick={() => setIsMenuOpen(false)}>
-                <PersonIcon sx={{ fontSize: 20, marginRight: '8px', verticalAlign: 'middle' }} />
+                <PersonIcon sx={{ fontSize: 22, marginRight: '8px', verticalAlign: 'middle' }} />
                 <span className="navbar-username">{userName}</span>
               </Link>
               <button
@@ -121,7 +151,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
                 aria-label="Logout"
                 title="Logout"
               >
-                <LogoutIcon sx={{ fontSize: 20 }} />
+                <LogoutIcon sx={{ fontSize: 22 }} />
               </button>
             </div>
           ) : (

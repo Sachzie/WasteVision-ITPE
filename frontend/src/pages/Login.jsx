@@ -35,7 +35,22 @@ function Login({ setIsAuthenticated }) {
         duration: 3000,
       })
       
-      navigate('/dashboard')
+      // If admin login is selected, ensure user is admin
+      if (values.adminLogin) {
+        if (user.role === 'admin') {
+          navigate('/admin')
+        } else {
+          toast.error('Your account is not an admin', { duration: 3000 })
+          navigate('/dashboard')
+        }
+      } else {
+        // Default redirect based on role
+        if (user.role === 'admin') {
+          navigate('/admin')
+        } else {
+          navigate('/dashboard')
+        }
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Login failed. Please try again.'
       toast.error(errorMessage, {
@@ -88,7 +103,8 @@ function Login({ setIsAuthenticated }) {
             initialValues={{
               email: '',
               password: '',
-              rememberMe: false
+              rememberMe: false,
+              adminLogin: false
             }}
             validationSchema={LoginSchema}
             onSubmit={handleSubmit}
@@ -180,6 +196,10 @@ function Login({ setIsAuthenticated }) {
                   <label className="checkbox-label">
                     <Field type="checkbox" name="rememberMe" />
                     <span>Remember me</span>
+                  </label>
+                  <label className="checkbox-label" style={{ marginLeft: '12px' }}>
+                    <Field type="checkbox" name="adminLogin" />
+                    <span>Admin login</span>
                   </label>
                 </div>
                 

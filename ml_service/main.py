@@ -11,7 +11,6 @@ import pathlib
 import os
 from datetime import datetime
 from collections import Counter
-import numpy as np
 
 # Fix for loading models trained on Linux/Mac in Windows
 if platform.system() == 'Windows':
@@ -33,44 +32,23 @@ app.add_middleware(
 TEMP_STORAGE_DIR = "temporary_storage"
 os.makedirs(TEMP_STORAGE_DIR, exist_ok=True)
 
-# Model paths
-MODEL_PATH_SAVEDMODEL = "models/trained_v3_savedmodel"  # SavedModel format
+# Model path (YOLOv5 local weights)
 MODEL_PATH_DEFAULT = "models/yolov5s.pt"
 
-logger.info("Loading models...")
-
-# Load TensorFlow SavedModel
-model_custom = None
-try:
-    import tensorflow as tf
-    from tensorflow import keras
-    
-    logger.info(f"TensorFlow version: {tf.__version__}")
-    
-    if not os.path.exists(MODEL_PATH_SAVEDMODEL):
-        raise FileNotFoundError(f"SavedModel not found at {MODEL_PATH_SAVEDMODEL}")
-    
-    logger.info(f"Loading SavedModel from {MODEL_PATH_SAVEDMODEL}...")
-    
-    # Use TFSMLayer for Keras 3 compatibility
-    model_custom = keras.layers.TFSMLayer(
-        MODEL_PATH_SAVEDMODEL, 
-        call_endpoint='serving_default'
-    )
-    logger.info("✓ SavedModel loaded successfully as TFSMLayer")
-    
-except Exception as e:
-    logger.error(f"Failed to load SavedModel: {str(e)}", exc_info=True)
-    logger.error("Make sure tensorflow is installed: pip install tensorflow")
-    logger.error(f"And that the SavedModel exists at: {MODEL_PATH_SAVEDMODEL}")
-    model_custom = None
+logger.info("Loading YOLOv5 model...")
 
 # Load default YOLOv5 model
 try:
-    model_default = torch.hub.load('ultralytics/yolov5', 'yolov5s', force_reload=False)
-    logger.info("✓ Default YOLOv5 model loaded successfully")
+    if os.path.exists(MODEL_PATH_DEFAULT):
+        # Load local YOLOv5 weights to avoid network dependency
+        model_default = torch.hub.load('ultralytics/yolov5', 'custom', MODEL_PATH_DEFAULT, force_reload=False)
+        logger.info("✓ YOLOv5 model loaded successfully (local weights)")
+    else:
+        # Fallback to pretrained yolov5s from torch hub
+        model_default = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+        logger.warning("Local weights not found; loaded pretrained yolov5s from Torch Hub")
 except Exception as e:
-    logger.error(f"Failed to load default model: {str(e)}")
+    logger.error(f"Failed to load YOLOv5 model: {str(e)}")
     raise
 
 # Detection configuration - OPTIMIZED FOR CAMERA CAPTURES
@@ -91,20 +69,7 @@ FONT_SIZE = 20
 HIDE_LABELS = False
 HIDE_CONF = False
 
-# Custom model waste classes mapping
-CUSTOM_WASTE_CLASSES = {
-    0: "hazardous",
-    1: "recyclable",
-    2: "biodegradable",
-    3: "nonbiodegradable"
-}
-
-CUSTOM_COLORS = {
-    "hazardous": "red",
-    "recyclable": "green",
-    "biodegradable": "blue",
-    "nonbiodegradable": "orange"
-}
+# Note: Removed custom TensorFlow classification model usage
 
 # Waste classification mapping for default model
 WASTE_CLASSES = {
@@ -235,18 +200,23 @@ async def root():
     return {
         "service": "WasteVision API",
         "status": "running",
-        "custom_model_loaded": model_custom is not None,
-        "custom_model_format": "SavedModel (TFSMLayer)" if model_custom else "Not loaded",
-        "custom_model_type": "Image Classification (entire image)" if model_custom else None,
-        "default_model_loaded": True,
-        "default_model_type": "YOLOv5 Object Detection (with bounding boxes)",
-        "classes": list(CUSTOM_WASTE_CLASSES.values()),
+        "model": "YOLOv5 (local weights)",
         "detection_config": {
             "confidence_threshold": CONF_THRESHOLD,
             "iou_threshold": IOU_THRESHOLD,
             "max_detections": MAX_DETECTIONS,
             "preprocessing_enabled": ENABLE_PREPROCESSING
         }
+    }
+
+
+@app.get("/health")
+async def health():
+    return {
+        "status": "ok",
+        "service": "WasteVision API",
+        "model": "YOLOv5",
+        "version": "v5",
     }
 
 
@@ -269,74 +239,7 @@ async def get_config():
     }
 
 
-def classify_with_tensorflow(image, model):
-    """Classify entire image using TensorFlow SavedModel via TFSMLayer"""
-    try:
-        import tensorflow as tf
-        
-        # Default input size - adjust based on your model
-        target_size = (224, 224)  # Common size, adjust if needed
-        
-        logger.info(f"Resizing image to {target_size}")
-        
-        # Preprocess image
-        img_resized = image.resize(target_size)
-        img_array = np.array(img_resized, dtype=np.float32)
-        
-        # Normalize to [0, 1]
-        img_array = img_array / 255.0
-        
-        # Add batch dimension
-        img_array = np.expand_dims(img_array, axis=0)
-        
-        logger.info(f"Input shape: {img_array.shape}")
-        
-        # Run inference - TFSMLayer returns a dictionary
-        result = model(img_array)
-        
-        # Extract predictions from the result dictionary
-        if isinstance(result, dict):
-            # Try common output keys
-            if 'output_0' in result:
-                predictions = result['output_0'].numpy()
-            elif 'dense' in result:
-                predictions = result['dense'].numpy()
-            else:
-                # Take the first output
-                predictions = list(result.values())[0].numpy()
-                logger.info(f"Available output keys: {list(result.keys())}")
-        else:
-            predictions = result.numpy()
-        
-        logger.info(f"Raw predictions shape: {predictions.shape}")
-        logger.info(f"Raw predictions: {predictions[0]}")
-        
-        # Get class with highest confidence
-        class_idx = np.argmax(predictions[0])
-        confidence = float(predictions[0][class_idx])
-        
-        waste_type = CUSTOM_WASTE_CLASSES.get(class_idx, "unknown")
-        
-        logger.info(f"✓ Classification: {waste_type} (class {class_idx}) with confidence {confidence:.2%}")
-        
-        # Get all class probabilities
-        all_predictions = {}
-        for idx, prob in enumerate(predictions[0]):
-            class_name = CUSTOM_WASTE_CLASSES.get(idx, f"class_{idx}")
-            all_predictions[class_name] = float(prob)
-        
-        logger.info(f"All class probabilities: {all_predictions}")
-        
-        return [{
-            "item": waste_type,
-            "type": waste_type,
-            "confidence": confidence,
-            "all_probabilities": all_predictions
-        }], {waste_type: 100.0}, 1
-        
-    except Exception as e:
-        logger.error(f"TensorFlow classification error: {str(e)}", exc_info=True)
-        return [], {}, 0
+# Removed TensorFlow classification helper; YOLOv5 is the single detection source.
 
 
 @app.post("/identify")
@@ -366,53 +269,6 @@ async def identify(file: UploadFile = File(...)):
             logger.info("Preprocessing disabled, using original image")
 
         response_data = {}
-
-        # Custom model classification (TensorFlow)
-        if model_custom is not None:
-            logger.info("Running TensorFlow SavedModel classification...")
-            
-            custom_response, custom_percentages, total_custom = classify_with_tensorflow(image, model_custom)
-            
-            # Create image with text overlay
-            image_custom = image.copy()
-            draw_custom = ImageDraw.Draw(image_custom)
-            try:
-                font = ImageFont.truetype("arial.ttf", 40)
-            except:
-                font = ImageFont.load_default()
-            
-            if custom_response:
-                waste_type = custom_response[0]["type"]
-                confidence = custom_response[0]["confidence"]
-                color = CUSTOM_COLORS.get(waste_type, "white")
-                text = f"{waste_type.upper()}: {confidence:.2%}"
-                
-                # Draw text with background
-                text_bbox = draw_custom.textbbox((10, 10), text, font=font)
-                draw_custom.rectangle(text_bbox, fill="black")
-                draw_custom.text((10, 10), text, fill=color, font=font)
-            
-            buffered_custom = io.BytesIO()
-            image_custom.save(buffered_custom, format="PNG")
-            img_custom_str = base64.b64encode(buffered_custom.getvalue()).decode()
-            
-            response_data["custom_model"] = {
-                "detections": custom_response,
-                "percentages": custom_percentages,
-                "total_detections": total_custom,
-                "image": f"data:image/png;base64,{img_custom_str}",
-                "model_format": "SavedModel (TFSMLayer)",
-                "note": "TensorFlow classification - classifies entire image into one category"
-            }
-        else:
-            logger.warning("Custom model not available")
-            response_data["custom_model"] = {
-                "error": "Model not loaded",
-                "detections": [],
-                "percentages": {},
-                "total_detections": 0,
-                "solution": f"Place your SavedModel at {MODEL_PATH_SAVEDMODEL}"
-            }
 
         # Default model detection (YOLOv5)
         logger.info("Running YOLOv5 object detection...")
@@ -480,12 +336,15 @@ async def identify(file: UploadFile = File(...)):
         image_default.save(buffered_default, format="PNG")
         img_default_str = base64.b64encode(buffered_default.getvalue()).decode()
 
+        # Ensure response matches frontend expectations: default_model only
         response_data["default_model"] = {
             "detections": default_response,
             "percentages": default_percentages,
             "total_detections": total_default,
             "image": f"data:image/png;base64,{img_default_str}"
         }
+        # Explicitly set custom_model to null (removed)
+        response_data["custom_model"] = None
         response_data["saved_file"] = saved_filename
         response_data["preprocessing_applied"] = ENABLE_PREPROCESSING
 
